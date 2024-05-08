@@ -1,9 +1,33 @@
+# version: '3.9'
+
+# services:
+#   web:
+#     networks:
+#       - web
+#   db:
+#     image: ghcr.io/eslih/postgres:16.1-alpine
+#     environment:
+#       - POSTGRES_DB=${POSTGRES_DB}
+#       - POSTGRES_USER=${POSTGRES_USER}
+#       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+#     # ports:
+#     #   - "5000:5000"
+#     networks:
+#       - database
+
+
+###
+
 version: '3.9'
 
 services:
   web:
+    build:
+      # context: /Users/melisaatis/Desktop/Melisa_Atish_big_data_ai_exam/part1/pointsApp/Dockerfile
+      dockerfile: Dockerfile 
     networks:
       - web
+
   db:
     image: ghcr.io/eslih/postgres:16.1-alpine
     environment:
@@ -12,3 +36,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     networks:
       - database
+
+networks:
+  web:
+  database:
