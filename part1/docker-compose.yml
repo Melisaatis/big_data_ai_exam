@@ -27,6 +27,17 @@ services:
       dockerfile: Dockerfile 
     networks:
       - web
+      - database
+    ports:
+      - "8080:80"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s    
+      
+  
 
   db:
     image: ghcr.io/eslih/postgres:16.1-alpine
@@ -36,7 +47,18 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     networks:
       - database
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
 networks:
   web:
   database:
+
+volumes:
+  db-data:
