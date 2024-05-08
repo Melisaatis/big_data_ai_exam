@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: exam-melisaatis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: melisaatis/big_data_and_ai-24_may_frontend:versie1
+        ports:
+        - containerPort: 80
+        env:
+        - name: API_PORT
+          value: "3000"
+        - name: API_HOST
+          value: api
+        - name: NAME
+          value: "Nathan Segers"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: exam-melisaatis
+spec:
+  selector:
+    app: frontend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      nodePort: 3000
+  type: NodePort
+  nodeName: k3d-k3s-default-agent-2
